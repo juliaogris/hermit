@@ -26,10 +26,11 @@ var userConfigSchema = func() string {
 
 // UserConfig is stored in ~/.hermit.hcl
 type UserConfig struct {
-	Prompt      string `hcl:"prompt,optional" default:"env" enum:"env,short,none" help:"Modify prompt to include hermit environment (env), just an icon (short) or nothing (none)"`
-	ShortPrompt bool   `hcl:"short-prompt,optional" help:"If true use a short prompt when an environment is activated."`
-	NoGit       bool   `hcl:"no-git,optional" help:"If true Hermit will never add/remove files from Git automatically."`
-	Idea        bool   `hcl:"idea,optional" help:"If true Hermit will try to add the IntelliJ IDEA plugin automatically."`
+	Prompt      string   `hcl:"prompt,optional" default:"env" enum:"env,short,none" help:"Modify prompt to include hermit environment (env), just an icon (short) or nothing (none)"`
+	ShortPrompt bool     `hcl:"short-prompt,optional" help:"If true use a short prompt when an environment is activated."`
+	NoGit       bool     `hcl:"no-git,optional" help:"If true Hermit will never add/remove files from Git automatically."`
+	Idea        bool     `hcl:"idea,optional" help:"If true Hermit will try to add the IntelliJ IDEA plugin automatically."`
+	Sources     []string `hcl:"sources,optional" help:"Package manifest sources."`
 }
 
 // LoadUserConfig from disk.
@@ -71,6 +72,9 @@ func (u *userConfigResolver) Resolve(context *kong.Context, parent *kong.Path, f
 
 	case "idea":
 		return u.config.Idea, nil
+
+	case "sources":
+		return u.config.Sources, nil
 
 	default:
 		return nil, nil
